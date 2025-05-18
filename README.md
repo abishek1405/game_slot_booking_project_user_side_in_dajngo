@@ -1,0 +1,1 @@
+# game_slot_booking_project_user_side_in_dajngo
