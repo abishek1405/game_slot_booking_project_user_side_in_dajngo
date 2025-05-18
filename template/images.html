@@ -1,0 +1,92 @@
+
+
+
+
+
+
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+
+
+<div class="login mt-5 d-flex flex-column justify-content-center">
+  {% if image_data %}
+    
+    <div class="container mt-3">
+      <div class="row">
+        {% for x in image_data %}
+        <div class="col-12 col-md-4 text-center mt-2 mb-2">
+          <img src="{{ x.img1.url }}" width="300px" alt="">
+          
+        </div>
+        
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+<div class="m-5"><center>---------------No Images Found---------------</center></div>
+    {% endif %}
+    
+  </div>
+  
+  <script>
+    const imgInput = document.getElementById('img1');
+    const errorMsg = document.getElementById('img-error');
+    const submitButton = document.getElementById('submitButton');
+    
+    imgInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+    
+      if (!file.type.match('image/')) {
+        errorMsg.textContent = 'Please select an image file.';
+        errorMsg.style.display = 'block';
+        submitButton.disabled = true; // Keep button disabled for non-image files
+        return;
+      }
+    
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onerror = function() { // Handle potential errors loading the image
+          errorMsg.textContent = 'Failed to load image. Please try again.';
+          errorMsg.style.display = 'block';
+          submitButton.disabled = true; // Disable button on error
+        };
+        img.onload = function() {
+          const width = img.naturalWidth;
+          const height = img.naturalHeight;
+    
+          // Define acceptable aspect ratios (adjust tolerances as needed)
+          const acceptableRatios = [9.16, 16 / 9];
+          const tolerance = 0.01;
+    
+          let aspectRatioValid = false;
+          for (const ratio of acceptableRatios) {
+            if (Math.abs((width / height) - ratio) <= tolerance) {
+              aspectRatioValid = true;
+              break;
+            }
+          }
+    
+          if (!aspectRatioValid) {
+            errorMsg.textContent = 'Please select an image with a 9:16 or 16:9 aspect ratio.';
+            errorMsg.style.display = 'block';
+            submitButton.disabled = true; // Disable button for invalid ratio
+          } else {
+            errorMsg.style.display = 'none';
+            submitButton.disabled = false; // Enable button for valid ratio
+          }
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+    </script>
+
+
+
+{% endblock %}

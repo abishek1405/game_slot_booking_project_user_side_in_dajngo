@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content  text-center">
+            <div class="modal-header">
+                <h5 class="modal-title " id="exampleModalLabel">Select your nearest city</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        
+                        {% for x in city_data %}
+                        <div class="text-center col-4 col-sm-4 col-md-3 city" data-city="{{ x.city }}">
+                            <a href="#"><img src="{% static 'img/cityy.png' %}" width="80%" alt=""></a>
+                            <p>{{ x }}</p>
+                            <form method="POST" class="city_form">
+                                {% csrf_token %}
+                                <input type="hidden" name="city_name" value="{{ x.city }}">
+                            </form>
+                        </div>
+                        {% endfor %}
+                        
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var cityDivs = document.querySelectorAll('.city');
+                            cityDivs.forEach(function(cityDiv) {
+                                cityDiv.addEventListener('click', function(event) {
+                                    event.preventDefault();
+                                    var cityName = this.getAttribute('data-city');
+                                    var form = this.querySelector('.city_form');
+                                    form.action = '/'; 
+                                    form.submit();
+                                });
+                            });
+                        });
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="banner">
+    <div class="container mt-3 mb-3 banner">
+      <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+          <div class="carousel-inner">
+              <div class="carousel-item active" data-bs-interval="3000">
+                  <img src="{% static 'img/banner.png' %}" class="ban-imgg d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item" data-bs-interval="3000">
+                  <img src="{% static 'img/banner22.png' %}" class="ban-imgg d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item" data-bs-interval="3000">
+                  <img src="{% static 'img/banner3.png' %}" class="ban-imgg d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item" data-bs-interval="3000">
+                  <img src="{% static 'img/banner4.png' %}" class="ban-imgg d-block w-100" alt="...">
+              </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+          </button>
+      </div>
+  </div>
+  
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% if data %}
+    <div class="container mt-3">
+        <div class="row">
+            <h4 class="p-2">Games:</h4>
+            {% for x in data %}
+            {% if x.Game_name == 'Billiards' %}
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="shadow mt-1 mb-2">
+                        <h6 class="p-2">Pool Table</h6>
+                        <div class="carousel slide carousel-fade" id="carouselExampleFade_{{ loop.index }}">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ x.pic1.url }}" class="d-block w-100" alt="{{ x.Game_name }} Image 1">
+                                </div>
+                               
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <center><a href="/{{ x.Game_name }}" class="btn btn-dark m-2">Book your Slot</a></center>
+                    </div>
+                </div>
+                {% endif %}
+                {% if x.Game_name == 'Snooker' %}
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="shadow mt-1 mb-2">
+                        <h6 class="p-2">Snooker</h6>
+                        <div class="carousel slide carousel-fade" id="carouselExampleFade_{{ loop.index }}">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ x.pic1.url }}" class="d-block w-100" alt="{{ x.Game_name }} Image 1">
+                                </div>
+                               
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <center><a href="/{{ x.Game_name }}" class="btn btn-dark m-2">Book your Slot</a></center>
+                    </div>
+                </div>
+                {% endif %}
+                {% if x.Game_name == 'Bowling' %}
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="shadow mt-1 mb-2">
+                        <h6 class="p-2">Bowling</h6>
+                        <div class="carousel slide carousel-fade" id="carouselExampleFade_{{ loop.index }}">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ x.pic1.url }}" class="d-block w-100" alt="{{ x.Game_name }} Image 1">
+                                </div>
+                               
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <center><a href="/{{ x.Game_name }}" class="btn btn-dark m-2">Book your Slot</a></center>
+                    </div>
+                </div>
+                {% endif %}
+                {% if x.Game_name == 'PS_GAMES' %}
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="shadow mt-1 mb-2">
+                        <h6 class="p-2">PS Games</h6>
+                        <div class="carousel slide carousel-fade" id="carouselExampleFade_{{ loop.index }}">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ x.pic1.url }}" class="d-block w-100" alt="{{ x.Game_name }} Image 1">
+                                </div>
+                               
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <center><a href="/{{ x.Game_name }}" class="btn btn-dark m-2">Book your Slot</a></center>
+                    </div>
+                </div>
+                {% endif %}
+                {% if x.Game_name == 'PC_Games' %}
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="shadow mt-1 mb-2">
+                        <h6 class="p-2">PC Games</h6>
+                        <div class="carousel slide carousel-fade" id="carouselExampleFade_{{ loop.index }}">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ x.pic1.url }}" class="d-block w-100" alt="{{ x.Game_name }} Image 1">
+                                </div>
+                               
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <center><a href="/{{ x.Game_name }}" class="btn btn-dark m-2">Book your Slot</a></center>
+                    </div>
+                </div>
+                {% endif %}
+                {% if x.Game_name == 'VR_games' %}
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="shadow mt-1 mb-2">
+                        <h6 class="p-2">VR Games</h6>
+                        <div class="carousel slide carousel-fade" id="carouselExampleFade_{{ loop.index }}">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ x.pic1.url }}" class="d-block w-100" alt="{{ x.Game_name }} Image 1">
+                                </div>
+                               
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade_{{ loop.index }}" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                        <center><a href="/{{ x.Game_name }}" class="btn btn-dark  m-2">Book your Slot</a></center>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var carousels = document.querySelectorAll('.carousel');
+    carousels.forEach(function(carousel) {
+        new bootstrap.Carousel(carousel, {
+            interval: false // Disable auto-slide if needed
+        });
+    });
+});
+
+</script>
+
+
+
+
+
+
+
+<style>
+    .events{
+        background: linear-gradient(to right, #caf2f4, #ababfe, #EED2F2);
+    }
+    body {
+    background: linear-gradient(to right, #caf2f4, #e6dcf1, #EED2F2);
+    }
+    .event-head{
+    font-family: roboto !important;
+    color: black !important;
+    }
+    .event-subhead{
+    color: red;
+    }
+    .event-para{
+            text-align: justify !important;
+        }
+
+    @media only screen and (max-width: 1000px) {
+        .event-head{
+        font-size: 15px;
+        }
+        .event-subhead,.event-para{
+        font-size: 10px;
+        }
+}
+   
+        
+</style>
+<div class="events">
+    <div class="container p-5">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="text-center">
+                    <img src="{% static 'img/card11.png' %}" class="w-75 img-fluid" alt="">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 d-flex flex-column justify-content-center">
+                <div>
+                    <h3 class="pt-3 event-head text-center"><b>Tournament Announcements</b></h3>
+                    <p class="text-center event-subhead p-2"><b>"Get Ready to Compete: Exciting Gaming Tournaments Await!"</b></p>
+                    <p class="event-para" style="text-align: justify;">Join the adrenaline-pumping action as we bring you a series of thrilling gaming tournaments! Whether you're a seasoned pro or just starting out, there's a competition for everyone. Sharpen your skills, strategize with your team, and gear up for the ultimate showdown. Keep an eye on our tournament schedule for upcoming events, and prepare to claim your victory!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6 d-flex flex-column justify-content-center order-2 order-md-1">
+                <div>
+                    <h3 class="pt-3 event-head text-center"><b>Special Events</b></h3>
+                    <p class="text-center event-subhead p-2"><b>"Experience Game Night Extravaganza: Unleash the Fun and Challenges!"</b></p>
+                    <p class="event-para" style="text-align: justify;">Step into the heart of excitement with our Game Night Extravaganza! Get ready for an unforgettable evening filled with laughter, competition, and camaraderie. From themed challenges to exclusive game releases, there's always something new to discover. Join fellow gamers for a night of non-stop entertainment and unforgettable memories.</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 order-1 order-md-2">
+                <div class="text-center">
+                    <img src="{% static 'img/card22.png' %}" class="w-75 img-fluid" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .terms_link{
+        text-decoration: underline;
+        color: red;
+        letter-spacing: 2px !important;
+    }
+</style>
+
+
+<div class="container">
+    <div class="col-12">
+        <center><a  class="terms_link nav-link active" href="/terms">Terms and Condition</a>  </center>
+    </div>
+</div>
+
+
+
+<script>
+    function changeImage(img) {
+    img.src = "{% static 'img/log1.png' %}";
+    }
+
+    function restoreImage(img) {
+    img.src = "{% static 'img/log.png' %}";
+    }   
+</script>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+
+<style>
+.card-title{
+    font-size: 14px;
+}
+</style>
+
+
+<div class="main container d-flex flex-column justify-content-center mt-5 mb-5">
+    <div class="row">
+        <div class="col-12 text-center">
+
+           
+<center>
+    <div class="card" style="width: 20rem;">
+        <img src="{% static 'img/thanks.jpg' %}" class="card-img-top w-100" alt="...">
+        <div class="card-body">
+        <h5 class="card-title text-success">Thanks for choosing Game on Time to Book your Slot</h5>
+        
+
+
+                <form action="/order_sucess/" onclick="" method="POST">
+                    {% csrf_token %}
+                    <script
+                    src="https://checkout.razorpay.com/v1/checkout.js"
+                    data-key="{{ razorpay_merchant_key }}"
+                    data-amount=  '{{ razorpay_amount }}'
+                    data-name="{{ request.user }}" 
+                    data-description="Purchase Description"
+                    data-image="vk.jpg"
+                    data-netbanking="true"
+                    data-description="Tron Legacy"
+                    data-prefill.name="Harshil Mathur"
+                    data-prefill.email="harshil@razorpay.com"
+                    data-prefill.contact="9999999999"
+                    data-notes.shopping_order_id="{{ razorpay_order_id }}">
+                </script>
+                <input type="hidden" name="shopping_order_id" value="21">
+                </form>
+        
+
+        </div>
+    </div>
+
+</center>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,555 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+  .btn-group .btn {
+    
+    padding: 0px 15px; /* Remove any default padding */
+    border-radius: 50px !important; /* Ensure it's perfectly round */
+    color: white;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 2px;
+    font-size: 15px;
+    border: none;
+    
+}
+
+
+</style>
+<div class="btn-group botton " role="group">
+  <button type="button" class="btn btn-info rounded-circle dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa-solid fa-user  ">   </i> {{ request.user }}
+  </button>
+  
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+  </ul>
+</div>
+
+
+{% endblock %}
+{% block content %}
+
+
+
+
+<style>
+  #customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #customers tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #customers tr:hover {background-color: #ddd;}
+  
+  #customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #060606;
+    color: white;
+  }
+  .btnp{
+      font-size: 15px;
+      color: white;
+      background-color: rgb(46, 111, 233);
+      padding: 5px 5px;
+      border: none;
+    }
+    .btnt{
+      font-size: 15px;
+      color: white;
+      background-color: rgb(255, 0, 0);
+      padding: 5px 5px;
+      border: none;
+    }
+    
+@media only screen and (max-width: 1000px) {
+    th,td{
+      font-size: 8px !important;
+    }
+    h3{
+      font-size: 12px;
+    }
+    .btnp{
+      font-size: 8px;
+      color: white;
+      background-color: rgb(46, 111, 233);
+      padding: 1px 2px;
+    }
+    .btnt{
+      font-size: 8px;
+      color: white;
+      background-color: rgb(255, 0, 0);
+      padding: 1px 2px;
+      border: none;
+    }
+    #customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 3px;
+  }
+ 
+}
+  </style>
+
+
+
+
+<style>
+  /* Modal styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 500px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 1000px) {
+  .close {
+  color: #aaa;
+  float: right;
+  font-size: 18px;
+  font-weight: bold;
+}
+.note{
+  font-size: 15px;
+}
+
+}
+
+.btnp{
+  border-radius: 30px;  
+  padding: 5px 10px;
+
+}
+.btnt{
+  border-radius: 30px !important;  
+  padding: 5px 10px;
+}
+</style>
+
+
+
+
+
+
+<div class="container main mb-5 mt-5">
+<div class="row">
+<div class="d-flex justify-content-between">
+  <h3>Your_Orders:</h3>
+  <a href="/history_order" style="text-decoration: none; color: rgb(255, 0, 0);"><h3 class=""><i class="fa-solid fa-clock-rotate-left"></i> History</h3></a>
+</div>
+{% if bowling_booking_data or biillardsgamme_booking_data or Snookergame_booking_data or psgame_booking_data or Vrgame_booking_data %}
+  {% if biillardsgamme_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+          <h3 class="head">Pool Table game</h3>
+          <table id="customers">
+              <tr>
+                <th>Spot Name</th>
+                <th>Order Id</th>
+                <th>Date</th>
+                <th>In Time</th>
+                <th>Out Time</th>
+                <th>Cost</th>
+                <th>Location</th>
+                <th>Cancel</th>
+              </tr>
+              {% for x in biillardsgamme_booking_data %}
+              <tr>
+                <td>{{ x.store_name }}</td>
+                <td>{{ x.booking_id }}</td>
+                <td>{{ x.datte }}</td>
+                <td>{{ x.in_time }}</td>
+                <td>{{ x.out_time }}</td>
+                <td>{{ x.cost }}</td>
+                <td>
+                  <center>
+                    <a target="_blank" href="{{ x.store_location }}"><button class="btnp">Location</button></a>
+                  </center>
+                </td>
+                <td>
+                  <center>
+                    <a href="/billiards_cancelation/{{ x.id }}" class="cancel-button " data-id="{{ x.id }}">
+                      <button type="button" class="btnt btn-success">Cancel</button>
+                    </a>
+                  </center>
+                </td>
+              </tr>
+              {% endfor %}
+              
+              <!-- Modal HTML -->
+              <div id="confirmationModal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <p class="note">Are you sure you want to cancel?</p>
+                  <button id="confirmCancel" class="btn btn-danger">Yes, cancel</button>
+                  <br>
+                  <button id="cancelAction" class="btn btn-secondary">No, keep</button>
+                </div>
+              </div>
+              
+
+            
+                
+  
+          </table>      
+      </div>
+  </div>
+  {% endif %} 
+  
+  
+
+  {% if bowling_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+  
+              <h3>Bowling Game</h3>
+              <table id="customers">
+                  <tr>
+                    <th>Spot Name</th>
+                    <th>Order Id</th>
+                    <th>Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Cost</th>
+                    <th>Location</th>
+                    <th>Cancel</th>
+                  </tr>
+                  {% for x in bowling_booking_data %}
+                  <tr>
+                    <td>{{ x.store_name }}</td>
+                    <td>{{ x.booking_id }}</td>
+                    <td>{{ x.datte }}</td>
+                    <td>{{ x.in_time }}</td>
+                    <td>{{ x.out_time }}</td>
+                    <td>{{ x.cost }}</td>
+                    <td><center><a target="_blank" href="{{ x.store_location }}"><button class="btnp ">Location</button></a></center></td>
+                    <td><center>
+                     
+                      <a href="/bowling_cancelation/{{ x.id }}" class="cancel-button" data-id="{{ x.id }}">
+                        <button type="button" class="btnt btn-success">Cancel</button>
+                      </a>
+                     
+                    </center></td>
+                    
+          
+                  </tr>
+                  {% endfor %}
+                  
+              </table>      
+                       
+      </div>
+  </div>
+  {% endif %}                       
+
+
+
+
+
+
+
+  {% if Snookergame_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+  
+              <h3>Snooker Game</h3>
+              <table id="customers">
+                  <tr>
+                    <th>Spot Name</th>
+                    <th>Order Id</th>
+                    <th>Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Cost</th>
+                    <th>Location</th>
+                    <th>Cancel</th>
+                  </tr>
+                  {% for x in Snookergame_booking_data %}
+                  <tr>
+                    <td>{{ x.store_name }}</td>
+                    <td>{{ x.booking_id }}</td>
+                    <td>{{ x.datte }}</td>
+                    <td>{{ x.in_time }}</td>
+                    <td>{{ x.out_time }}</td>
+                    <td>{{ x.cost }}</td>
+                    <td><center><a target="_blank" href="{{ x.store_location }}"><button class="btnp ">Location</button></a></center></td>
+                    <td><center>
+                     
+                      <a href="/snooker_cancelation/{{ x.id }}" class="cancel-button" data-id="{{ x.id }}">
+                        <button type="button" class="btnt btn-success">Cancel</button>
+                      </a>
+                     
+                    </center></td>
+                    
+          
+                  </tr>
+                  {% endfor %}
+                  
+              </table>      
+                       
+      </div>
+  </div>
+  {% endif %}                       
+  {% if Vrgame_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+  
+              <h3>Vr Game</h3>
+              <table id="customers">
+                  <tr>
+                    <th>Spot Name</th>
+                    <th>Order Id</th>
+                    <th>Date</th>          
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Cost</th>
+                    <th>Location</th>
+                    <th>Cancel</th>
+                  </tr>
+                  {% for x in Vrgame_booking_data %}
+                  <tr>
+                    <td>{{ x.store_name }}</td>
+                    <td>{{ x.booking_id }}</td>
+                    <td>{{ x.datte }}</td>
+                    <td>{{ x.in_time }}</td>
+                    <td>{{ x.out_time }}</td>
+                    <td>{{ x.cost }}</td>
+                    <td><center><a target="_blank" href="{{ x.store_location }}"><button class="btnp ">Location</button></a></center></td>
+                    <td><center>
+                      
+                            
+                        <a href="/vr_cancelation/{{ x.id }}" class="cancel-button" data-id="{{ x.id }}">
+                      <button type="button" class="btnt btn-success">Cancel</button>
+                    </a>
+                     
+                    </center></td>
+        
+                  </tr>
+                  {% endfor %}
+                  
+              </table>      
+                            
+      </div>
+  </div>
+  {% endif %}  
+  
+  
+  {% if pcgame_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+  
+              <h3>Pc Game</h3>
+              <table id="customers">
+                  <tr>
+                    <th>Spot Name</th>
+                    <th>Order Id</th>
+                    <th>Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Cost</th>
+                    <th>Location</th>
+                    <th>Cancel</th>
+                  </tr>
+                  {% for x in pcgame_booking_data %}
+                  <tr>
+                    <td>{{ x.store_name }}</td>
+                    <td>{{ x.booking_id }}</td>
+                    <td>{{ x.datte }}</td>
+                    <td>{{ x.in_time }}</td>
+                    <td>{{ x.out_time }}</td>
+                    <td>{{ x.cost }}</td>
+                    <td><center><a target="_blank" href="{{ x.store_location }}"><button class="btnp ">Location</button></a></center></td>
+                    <td><center>
+                     
+                        <a href="/pc_cancelation/{{ x.id }}" class="cancel-button" data-id="{{ x.id }}">
+                      <button type="button" class="btnt btn-success">Cancel</button>
+                    </a>
+                     
+                    </center></td>
+         
+                  </tr>
+                  {% endfor %}
+                  
+              </table>      
+                            
+      </div>
+  </div>
+  {% endif %}  
+
+
+  {% if psgame_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+  
+              <h3>Ps Game</h3>
+              <table id="customers">
+                  <tr>
+                    <th>Spot Name</th>
+                    <th>Order Id</th>
+                    <th>Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Cost</th>
+                    <th>Location</th>
+                    <th>Cancel</th>
+                  </tr>
+                  {% for x in psgame_booking_data %}
+                  <tr>
+                    <td>{{ x.store_name }}</td>
+                    <td>{{ x.booking_id }}</td>
+                    <td>{{ x.datte }}</td>
+                    <td>{{ x.in_time }}</td>
+                    <td>{{ x.out_time }}</td>
+                    <td>{{ x.cost }}</td>
+                    <td><center><a target="_blank" href="{{ x.store_location }}"><button class="btnp ">Location</button></a></center></td>
+                    <td><center>
+                     
+                        <a href="/ps_cancelation/{{ x.id }}" class="cancel-button" data-id="{{ x.id }}">
+                      <button type="button" class="btnt btn-success">Cancel</button>
+                    </a>
+                     
+                    </center></td>
+         
+                  </tr>
+                  {% endfor %}
+                  
+              </table>      
+                            
+      </div>
+  </div>
+  {% endif %}     
+  {% else %}
+
+  <table id="customers">
+    <center>
+      <img src="{% static 'img/sorry.png' %}" width="300px" alt="">
+    </center>
+    <tr>
+      <th rowspan="5"><center>---------------No Orders found---------------</center></th>
+    </tr>
+  
+   
+    
+    
+</table>      
+  
+  {% endif %}
+</div>
+</div>
+
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var cancelButtons = document.querySelectorAll('.cancel-button');
+    var modal = document.getElementById('confirmationModal');
+    var confirmButton = document.getElementById('confirmCancel');
+    var cancelButton = document.getElementById('cancelAction');
+    var span = document.getElementsByClassName('close')[0];
+    var targetHref = '';
+  
+    cancelButtons.forEach(function(button) {
+      button.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        targetHref = this.href; // Save the target URL
+        modal.style.display = 'block'; // Show the modal
+      });
+    });
+  
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = 'none';
+    }
+  
+    // When the user clicks on "No, keep", close the modal
+    cancelButton.onclick = function() {
+      modal.style.display = 'none';
+    }
+  
+    // When the user clicks on "Yes, cancel", redirect to the URL
+    confirmButton.onclick = function() {
+      window.location.href = targetHref;
+    }
+  
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+  });
+  </script>
+
+
+
+<script>
+  function changeImage(img) {
+  img.src = "{% static 'img/log1.png' %}";
+  }
+
+  function restoreImage(img) {
+  img.src = "{% static 'img/log.png' %}";
+  }   
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+
+<style>
+  .btn-group .btn {
+    
+    padding: 10px 5px; /* Remove any default padding */
+    border-radius: 10px !important; /* Ensure it's perfectly round */
+    background-color: rgb(247, 2, 2) !important;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 2px;
+    font-size: 15px;
+    border: none;
+    
+}
+
+
+
+</style>
+<div class="btn-group botton" role="group">
+  <button type="button" class="btn btn-primary rounded-circle dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa-solid fa-user  ">  &nbsp;  {{ request.user }}</i>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+  </ul>
+</div>
+
+
+{% endblock %}
+{% block content %}
+
+
+
+<style>
+    /* style.css */
+#booking-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#booking-table th,
+#booking-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+#booking-table th {
+  background-color: #f2f2f2;
+}
+
+/* Styling for available and booked time slots */
+#booking-table td.available {
+  background-color: #e5ffe5;
+}
+
+#booking-table td.booked {
+  background-color: #ffd5d5;
+}
+
+</style>
+
+
+<style>
+  input[type=text],input[type=date],input[type=number],[type=time],  select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+  
+  .form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  a{
+    text-decoration: none;
+  }
+  .store-name{
+      font-size: 20px;
+    }
+    .increase-btn{
+      padding: 0px 10px;
+      margin: 10px;
+      
+    }
+  .mins{
+    margin-top: 15px;
+  }
+@media only screen and (max-width: 1000px) {
+    .store-name{
+      font-size: 12px;
+    }
+}
+  </style>
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+       
+          <form method="POST">
+            {% csrf_token %}
+                        
+          <div class="form mt-5 mb-5">
+            <div class="d-flex justify-content-between">
+              <h5 class="store-name">
+                Station Name: {{ table.store_name }}
+             </h5>
+             <a class="store-name" target="_blank" href="{{ table.store_location }}"><i class="fa-solid fa-map-location-dot"></i> Location</a>
+            </div>
+              <label for="fname">Date</label>
+              <input type="date" id="date" name="date">
+
+
+              <script>
+                var dateInput = document.getElementById('date');
+                var currentDate = new Date();
+                dateInput.min = currentDate.toISOString().split('T')[0];
+            </script>
+
+       
+       
+         
+           <div class="pt-3">
+            <center><b><p class="text-danger">Choose the time between <span class="text-success">{{ game_details.open_time }}</span> To <span class="text-success">{{ game_details.close_time }}</span></p></b></center>
+           </div>
+           
+           
+           <label for="cost">Price</label>
+           <input type="number" name="cost" id="cost" required>
+           <input type="submit" value="Pay">
+            
+          </div>
+          </form>
+        </div>
+        <div class="col-12 col-md-6 d-none d-md-flex flex-column justify-content-center">
+        <div class="mt-5 mb-5">
+          <center><b><h4>Kids Gaming</h4></b></center>
+          <img src="{% static 'img/kids_book.jpg' %}" class="w-100" alt="">
+        </div>
+      </div>
+      
+    </div>
+</div>
+
+
+
+
+{% endblock %}

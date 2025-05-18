@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+  .btn-group .btn {
+    
+    padding: 10px 5px; /* Remove any default padding */
+    border-radius: 10px !important; /* Ensure it's perfectly round */
+    
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 2px;
+    font-size: 15px;
+    border: none;
+    
+}
+
+
+
+</style>
+<div class="btn-group botton " role="group">
+  <button type="button" class="btn btn-primary rounded-circle dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa-solid fa-user  ">   </i> {{ request.user }}
+  </button>
+  
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+  </ul>
+</div>
+
+
+{% endblock %}
+{% block content %}
+
+
+
+
+<style>
+  #customers {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #customers tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #customers tr:hover {background-color: #ddd;}
+  
+  #customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #000000;
+    color: white;
+  }
+
+  
+@media only screen and (max-width: 1000px) {
+    th,td{
+      font-size: 8px !important;
+    }
+    h3{
+      font-size: 15px;
+    }
+}
+  </style>
+
+
+
+
+
+
+
+
+<div class="container main mb-5 mt-5">
+<div class="row">
+<div class="d-flex justify-content-between">
+  <h3>History:</h3>
+  <a  href="/your_order"><h3><i class="fa-solid fa-arrow-left text-dark"></i> </h3></a>
+  
+</div>
+{% if bowling_booking_data or biillardsgamme_booking_data or Snookergame_booking_data or psgame_booking_data or Vrgame_booking_data %}
+  {% if biillardsgamme_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+          <h3>Pool Table game</h3>
+          <table id="customers">
+              <tr>
+                <th>Spot Name</th>
+                <th>Order Id</th>
+                <th>Date</th>
+                <th>In Time</th>
+                <th>Out Time</th>
+                <th>Cost</th>
+                
+              </tr>
+              {% for x in biillardsgamme_booking_data %}
+              <tr>
+                <td>{{ x.store_name }}</td>
+                <td>{{ x.booking_id }}</td>
+                <td>{{ x.datte }}</td>
+                <td>{{ x.in_time }}</td>
+                <td>{{ x.out_time }}</td>
+                <td>{{ x.cost }}</td>
+               
+              </tr>
+              {% endfor %}
+              
+          </table>      
+      </div>
+  </div>
+  {% endif %}   
+  
+  
+
+
+
+  {% if bowling_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+          <h3>Bowling Game</h3>
+          <table id="customers">
+              <tr>
+                <th>Spot Name</th>
+                <th>Order Id</th>
+                <th>Date</th>
+                <th>In Time</th>
+                <th>Out Time</th>
+                <th>Cost</th>
+                
+              </tr>
+              {% for x in bowling_booking_data %}
+              <tr>
+                <td>{{ x.store_name }}</td>
+                <td>{{ x.booking_id }}</td>
+                <td>{{ x.datte }}</td>
+                <td>{{ x.in_time }}</td>
+                <td>{{ x.out_time }}</td>
+                <td>{{ x.cost }}</td>
+               
+              </tr>
+              {% endfor %}
+              
+          </table>      
+      </div>
+  </div>
+  {% endif %}   
+
+
+
+
+  {% if Snookergame_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+  
+              <h3>Snooker Game</h3>
+              <table id="customers">
+                  <tr>
+                    <th>Spot Name</th>
+                    <th>Order Id</th>
+                    <th>Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Cost</th>
+                    
+                  </tr>
+                  {% for x in Snookergame_booking_data %}
+                  <tr>
+                    <td>{{ x.store_name }}</td>
+                    <td>{{ x.booking_id }}</td>
+                    <td>{{ x.datte }}</td>
+                    <td>{{ x.in_time }}</td>
+                    <td>{{ x.out_time }}</td>
+                    <td>{{ x.cost }}</td>
+                   
+                  </tr>
+                  {% endfor %}
+                  
+              </table>      
+                       
+      </div>
+  </div>
+  {% endif %}                       
+  {% if Vrgame_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+  
+              <h3>Vr Game</h3>
+              <table id="customers">
+                  <tr>
+                    <th>Spot Name</th>
+                    <th>Order Id</th>
+                    <th>Date</th>          
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Cost</th>
+                    
+                  </tr>
+                  {% for x in Vrgame_booking_data %}
+                  <tr>
+                    <td>{{ x.store_name }}</td>
+                    <td>{{ x.booking_id }}</td>
+                    <td>{{ x.datte }}</td>
+                    <td>{{ x.in_time }}</td>
+                    <td>{{ x.out_time }}</td>
+                    <td>{{ x.cost }}</td>
+                   
+                  </tr>
+                  {% endfor %}
+                  
+              </table>      
+                            
+      </div>
+  </div>
+  {% endif %}                  
+  {% if psgame_booking_data %}
+  <div class="shadow mt-4">
+      <div class="col-12 p-3">
+  
+              <h3>Ps Game</h3>
+              <table id="customers">
+                  <tr>
+                    <th>Spot Name</th>
+                    <th>Order Id</th>
+                    <th>Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Cost</th>
+                    
+                  </tr>
+                  {% for x in psgame_booking_data %}
+                  <tr>
+                    <td>{{ x.store_name }}</td>
+                    <td>{{ x.booking_id }}</td>
+                    <td>{{ x.datte }}</td>
+                    <td>{{ x.in_time }}</td>
+                    <td>{{ x.out_time }}</td>
+                    <td>{{ x.cost }}</td>
+                   
+                  </tr>
+                  {% endfor %}
+                  
+              </table>      
+                            
+      </div>
+  </div>
+  {% endif %}     
+  {% else %}
+
+  <table id="customers">
+    <center>
+      <img src="{% static 'img/sorry.png' %}" width="300px" alt="">
+    </center>
+    <tr>
+      <th rowspan="5"><center>---------------No Orders found---------------</center></th>
+    </tr>
+  
+   
+    
+    
+</table>      
+  
+  {% endif %}
+</div>
+</div>
+
+
+
+
+
+<script>
+  function changeImage(img) {
+  img.src = "{% static 'img/log1.png' %}";
+  }
+
+  function restoreImage(img) {
+  img.src = "{% static 'img/log.png' %}";
+  }   
+</script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

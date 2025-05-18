@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %}
+
+
+
+
+<style>
+    .no-data{
+        height: 60vh;
+    }
+    body {
+    background: linear-gradient(to right, #caf2f4, #e6dcf1, #EED2F2);
+}
+</style>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content  text-center">
+            <div class="modal-header">
+                <h5 class="modal-title " id="exampleModalLabel">Select your nearest city</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                   
+                        {% for x in city_data %}
+                            {% if x.city != None  %}
+                            <div class="text-center col-4 col-sm-4 col-md-3 city" data-city="{{ x.city }}">
+                                <a href="#"><img src="{% static 'img/cityy.png' %}" width="80%" alt=""></a>
+                                <p>{{ x.city }}</p>
+                                <form method="POST" class="city_form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="city_name" value="{{ x.city }}">
+                                </form>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var cityDivs = document.querySelectorAll('.city');
+                            cityDivs.forEach(function(cityDiv) {
+                                cityDiv.addEventListener('click', function(event) {
+                                    event.preventDefault();
+                                    var cityName = this.getAttribute('data-city');
+                                    var form = this.querySelector('.city_form');
+                                    form.action = '/{{ filter_cancel }}/'; // Set the action URL dynamically
+                                    form.submit();
+                                });
+                            });
+                        });
+                        </script>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+{% if data %}
+    <div class="container mt-3 mb-3">
+        <div class="row">
+            <div class="d-flex justify-content-between">
+                <h4 class="p-2">{{ display_game_name }}: </h4> 
+                <!-- <a href="/{{ filter_cancel }}"><button  class="btn btn-danger"> <i class="fa-solid fa-filter"></i> Filter</button></a> -->
+                <button type="button" class="text-dark location nav-link active" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="fa-solid fa-location-dot text-dark"></i>  {{ location }}
+                </button>
+            </div>
+                        
+            <script>
+                function goBack() {
+                    window.history.back();
+                }
+            </script>
+<style>
+    .card-body p {
+        margin: 2px 0; /* Adjust the value as needed */
+        padding: 0;
+    }
+    .card-body{
+        margin-top: -20px;
+    }
+    .card{
+        background-color: transparent;
+    }
+    .card-img-top{
+        border-radius: 30px !important;
+        
+    }
+</style>
+            {% for x in data %}
+                <div class="col-12 col-md-3">
+                    <div class="shadow mt-1 mb-2">
+                        <div class="card" style="width: 100%;">
+                            <center>
+                                <img src="{{ game_image.pic1.url }}" class="card-img-top w-75 p-3" alt="...">
+                            </center>
+                            <div class="card-body">
+                              <p class="card-text"><b>Game Centre name:</b> {{ x.store_name }}</p>
+                              <p class="card-text"><b>Charges per/hrs:</b> {{ x.price }}</p>
+                              <p class="card-text"><b>Timing : </b>{{ x.open_time }} - {{ x.close_time }}</p>
+                              
+                              <p class="card-text"><b>City : </b>{{ x.area }}, {{ x.city }}</p>
+                              <div class="d-flex justify-content-between">
+                                <p class="card-text"><b>Link: </b><a target="_blank" href="{{ x.store_location }}"><i class="fa-solid fa-location-crosshairs text-danger"></i>  Location Link</a></p>
+                              <a href="/galler/{{ x.store_name }}" class=""><i class="fa-solid fa-image"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        <center><a href="/{{ game_image.Game_name }}_booking/{{ x.id }}" class="btn btn-dark m-1 ">Book your slot </a></center>
+                        
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+<div class="no-data d-flex flex-column justify-content-center">
+    <div class="bg-dark text-white text-center p-3 m-5">---No Data Found---</div>
+</div>
+{% endif %}
+
+
+
+
+
+
+
+{% endblock %}

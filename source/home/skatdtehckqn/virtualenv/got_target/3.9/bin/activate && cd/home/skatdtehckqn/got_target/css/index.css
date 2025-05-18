@@ -1,0 +1,114 @@
+.logo{
+    width: 75px;
+}
+
+.navbar-toggler {
+    border: none !important; /* Remove the border */
+}
+
+.events-cards{
+    background-color: rgb(255, 255, 255);
+}
+
+.event-subhead{
+    color: rgb(207, 29, 148);
+}
+
+.event-head{
+    font-family: roboto !important;
+    color: rgb(244, 4, 4);
+}
+
+.events{
+    background-color: rgb(25, 103, 131);
+}
+
+
+.navbar{
+    font-family: roboto !important;
+}
+body{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
+}
+
+.banner{
+    height: 60vh !important;
+}
+
+@media only screen and (max-width: 1000px) {
+    .banner {
+        height: 30vh !important;
+    }
+    .ban-img {
+        height: 30vh;
+    }
+}
+
+.ban-imgg{
+    height: 60vh;
+}
+
+/* .navbar{
+    background-color: azure;
+} */
+
+.logo:hover {
+    content: url('img/log1.png');
+}
+
+.nav-model{
+    margin-right: 40px;
+}
+.city:hover{
+    border: 2px  solid rgb(38, 38, 187);
+    background-color: azure;
+    
+}
+
+.nav-btn{
+    padding: 0px 20px !important;
+    border-radius: 30px !important;
+    color: white !important;
+}
+
+
+
+
+
+
+.footer-heading{
+    color: white;
+    font-size: 13px;
+    text-align: center;
+}
+.footer-paragraph{
+    color: white;
+    font-size: 10px;
+    text-align: center;
+}
+
+.footer-rights{
+    color: #ffffff;
+}
+
+.footer{
+    background-color: black;
+}
+
+.footer-container{
+    border-right: 2px solid white;
+}
+
+
+@media only screen and (max-width: 1000px) {
+    .footer-heading{
+        color: white;
+        font-size: 13px;
+        text-align: left;
+    }
+    .footer-paragraph{
+        color: white;
+        font-size: 10px;
+        text-align: justify;
+    }
+}

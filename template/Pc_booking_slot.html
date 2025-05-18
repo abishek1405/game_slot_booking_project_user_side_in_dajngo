@@ -1,0 +1,512 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+
+{% block nav %}
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+  .btn-group .btn {
+    
+    padding: 0px 15px; /* Remove any default padding */
+    border-radius: 50px !important; /* Ensure it's perfectly round */
+    color: white;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    letter-spacing: 2px;
+    font-size: 15px;
+    border: none;
+    
+}
+
+
+
+</style>
+<div class="btn-group botton " role="group">
+  <button type="button" class="btn btn-info rounded-circle dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa-solid fa-user  ">   </i> {{ request.user }}
+  </button>
+  
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+  </ul>
+</div>
+
+
+{% endblock %}
+{% block content %}
+
+
+
+<style>
+    /* style.css */
+#booking-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#booking-table th,
+#booking-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #dddddd00;
+}
+
+#booking-table th {
+  background-color: #ffffff00;
+}
+
+/* Styling for available and booked time slots */
+#booking-table td.available {
+  background-color: #e5ffe5;
+}
+
+#booking-table td.booked {
+  background-color: #ffd5d5;
+}
+
+</style>
+
+
+<style>
+  /* General input styling */
+input{
+  width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    -webkit-appearance: none; /* Removes default styling in Safari */
+    -moz-appearance: none; /* Removes default styling in Firefox */
+    appearance: none;
+}
+
+input[type=text], 
+input[type=date], 
+input[type=number], 
+input[type=time], 
+select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    -webkit-appearance: none; /* Removes default styling in Safari */
+    -moz-appearance: none; /* Removes default styling in Firefox */
+    appearance: none; /* Ensures consistent styling */
+}
+
+/* Submit button styling */
+input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px; /* Ensure consistent font size */
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+/* Submit button hover state */
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+/* Form container styling */
+.form {
+    border-radius: 5px;
+    padding: 20px;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+}
+
+label{
+    font-weight: bold;
+    font-size: 12px; 
+}
+/* Anchor tag styling */
+a {
+    text-decoration: none;
+}
+
+/* Store name styling */
+.store-name {
+    font-size: 20px;
+}
+
+/* Increase button styling */
+.increase-btn {
+    padding: 0px 10px;
+    margin: 10px;
+}
+
+/* Mins class styling */
+.mins {
+    margin-top: 15px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .store-name{
+      font-size: 15px;
+    }
+}
+
+.form{
+  background-color: white;
+}
+  </style>
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-6">
+          <form method="POST" id="bookingForm">
+            {% csrf_token %}
+            
+            <div class="form">
+              <div class="d-flex justify-content-between">
+                <h5 class="store-name">Station name: {{ table.store_name }}</h5>
+                <a class="store-name" target="_blank" href="{{ table.store_location }}">
+                  <i class="fa-solid fa-map-location-dot"></i> Location
+                </a>
+              </div>
+             <label for="date">Date:</label>
+             <input type="date" id="date" name="date" value="" required>
+              <label for="number_of_billiards">System:</label>
+              <select name="number_of_billiards" required>
+                {% for num_billiards in num_billiards_list %}
+                  <option value="{{ num_billiards }}">PC-{{ num_billiards }}</option>
+                {% endfor %}
+              </select>
+          
+              <div class="pt-3">
+                <center>
+                  <b>
+                    <p class="text-danger">Choose the time between 
+                      <span class="text-success">{{ game_details.open_time }}</span> 
+                      To 
+                      <span class="text-success">{{ game_details.close_time }}</span>
+                    </p>
+                  </b>
+                </center>
+              </div>
+
+
+
+
+
+<div class="d-md-none">
+  
+  <table id="data-table">
+    <thead>
+        <tr>
+          <th>Player_Name</th>
+          <th>Booking_Date</th>
+          <th>Check_In_Time</th>
+          <th>Check_Out_Time</th>
+          <th>Table_Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be inserted here -->
+    </tbody>
+  </table>
+</div>
+
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <center><p style="color: red;">{{ message }}</p></center>
+        {% endfor %}
+    </ul>
+{% endif %}
+          
+            <div class="d-flex justify-content-between">
+              <div class="col-6">
+              <label for="open-time">Start:</label>
+              <input type="time" id="open-time" name="open-time" required>
+              </div>
+              <div class="col-6">
+              <label for="close-time">Finish:</label>
+              <input type="time" id="close-time" name="close-time" readonly required>
+              </div>
+            </div>
+              <style>
+                .increase-btn {
+                  background-color: rgb(96, 175, 218);
+                  color: rgb(255, 255, 255);
+                  border: none;
+                  border-radius: 10px;
+                  padding: 0px 15 px;
+                }
+              </style>
+          
+              <div class="d-flex">
+                <button type="button" id="decrease-btn" class="increase-btn bg-primary">-</button>
+                <p class="mins" id="duration">60 mins</p>
+                <button type="button" class="increase-btn bg-primary" id="increase-btn" disabled>+</button>
+              </div>
+          
+              <input type="hidden" name="store_name" value="{{ table.store_name }}">
+          
+              <label for="cost">Price:</label>
+              <input type="number" value="{{ game_details.price }}" name="cost" id="cost" readonly required>
+            
+              <br>
+              <style>
+                .btn{
+                  background-color: green;
+                }
+              </style>
+              <center>
+                <button type="submit" class="btn btn-success" >Confirm slot</button>
+              </center>
+            </div>            
+          </form>
+          
+         
+          </div>
+
+
+
+
+          
+          
+          
+
+<!-- Ajax -->
+
+
+
+
+        <div class="col-12 col-md-6  d-none d-md-flex flex-column justify-content-center">
+
+          <style>
+            table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+            
+            th, td {
+              text-align: left;
+              padding: 8px;
+              text-align: center;
+            }
+            
+            tr:nth-child(even) {background-color: #f2f2f200;}
+
+            @media (max-width: 1400px) {
+            th,td{
+              font-size: 10px;
+            }
+            }
+            @media (max-width: 800px) {
+            th,td{
+              font-size: 8px;
+            }
+            th,td{
+              font-size: 6px;
+            }
+            }
+            </style>
+
+
+<center><b><h4>PC Booking Details</h4></b></center>       
+<table id="data-table">
+  <thead>
+      <tr>
+        <th>Player_Name</th>
+        <th>Booking_Date</th>
+        <th>Check_In_Time</th>
+        <th>Check_Out_Time</th>
+        <th>Table_Number</th>
+      </tr>
+  </thead>
+  <tbody>
+      <!-- Data will be inserted here -->
+  </tbody>
+</table>
+
+      </div>
+      
+    </div>
+</div>
+
+
+
+<script>
+  $(document).ready(function() {
+      $('#date').on('change', function() {
+          var selectedDate = $(this).val();
+          console.log("Selected Date:", selectedDate); // Debugging output
+
+          $.ajax({
+              type: "POST",
+              url: "{% url 'pc_games_filter_data' %}",
+              data: JSON.stringify({
+                  'date': selectedDate,
+                  'id': '{{ id }}',
+                  'csrfmiddlewaretoken': '{{ csrf_token }}'
+              }),
+              contentType: "application/json",  // Ensure the data is sent as JSON
+              success: function(response) {
+                  console.log("Response:", response); // Debugging output
+                  var tbody = $('#data-table tbody');
+                  tbody.empty();  // Clear existing data
+                  response.forEach(function(item) {
+                      var row = '<tr>';
+                      row += '<td>' + item.user__username + '</td>';
+                      row += '<td>' + item.datte + '</td>';
+                      row += '<td>' + item.in_time + '</td>';
+                      row += '<td>' + item.out_time + '</td>';
+                      row += '<td>' + 'T-' + item.number_of_billiards + '</td>';
+                      row += '</tr>';
+                      tbody.append(row);
+                  });
+              },
+              error: function(xhr, errmsg, err) {
+                  console.log("Error:", errmsg); // Debugging output
+                  alert("An error occurred: " + errmsg);
+              }
+          });
+      });
+  });
+</script>
+
+
+
+
+<!-- <script>
+  // Get today's date in the format YYYY-MM-DD (required by <input type="date">)
+  const today = new Date().toISOString().split('T')[0];
+  
+  // Set the value of the date input field to today's date
+  document.getElementById('date').value = today;
+</script>  -->
+
+
+
+
+
+<script>
+  // Set the minimum date for the date input
+  var dateInput = document.getElementById('date');
+  var currentDate = new Date();
+  dateInput.min = currentDate.toISOString().split('T')[0];
+
+  var openTimeInput = document.getElementById('open-time');
+  var closeTimeInput = document.getElementById('close-time');
+  var durationElement = document.getElementById('duration');
+  var decreaseBtn = document.getElementById('decrease-btn');
+  var increaseBtn = document.getElementById('increase-btn');
+  var costInput = document.getElementById('cost');
+  var hourlyPrice = parseFloat('{{ game_details.price }}'); // Assuming this value is a valid float
+
+  // Convert time to 24-hour format if needed
+  function convertTimeTo24HourFormat(time) {
+      var splitTime = time.split(' ');
+      var hours = parseInt(splitTime[0]);
+      var isPM = splitTime[1].toLowerCase() === 'p.m.';
+      if (isPM && hours !== 12) {
+          hours += 12;
+      } else if (!isPM && hours === 12) {
+          hours = 0;
+      }
+      return hours.toString().padStart(2, '0') + ':00';
+  }
+
+  // Initialize open time input
+  openTimeInput.value = convertTimeTo24HourFormat("{{ game_details.open_time }}");
+  var start_time = openTimeInput.value;
+
+  // Function to add one hour to a given time string
+  function addOneHour(timeStr) {
+      var timeParts = timeStr.split(':');
+      var hours = parseInt(timeParts[0]);
+      var minutes = parseInt(timeParts[1]);
+
+      // Add one hour
+      hours = (hours + 1) % 24; // Ensure hours stay within 0-23 range
+
+      // Format hours and minutes to always be two digits
+      var formattedHours = hours.toString().padStart(2, '0');
+      var formattedMinutes = minutes.toString().padStart(2, '0');
+
+      return formattedHours + ':' + formattedMinutes;
+  }
+
+  // Initialize duration and close time
+  durationElement.textContent = '60 mins';
+  var close_time = addOneHour(start_time);
+  closeTimeInput.value = close_time;
+
+  // Event listeners
+  openTimeInput.addEventListener('input', updateCloseTime);
+  decreaseBtn.addEventListener('click', decreaseDuration);
+  increaseBtn.addEventListener('click', increaseDuration);
+
+  function updateCloseTime() {
+      if (openTimeInput.value !== "") {
+          var openTime = new Date('2000-01-01T' + openTimeInput.value + ':00');
+          var currentDuration = parseInt(durationElement.textContent.split(' ')[0]);
+          var closeTime = new Date(openTime.getTime() + currentDuration * 60000);
+          if (closeTime.getHours() >= 1 && closeTime.getHours() <= 23) {
+              var closeTimeString = closeTime.getHours().toString().padStart(2, '0') + ':' + closeTime.getMinutes().toString().padStart(2, '0');
+              closeTimeInput.value = closeTimeString;
+              updateCost(currentDuration);
+          } else {
+              alert("Close time should be between 1 am and 11:59 pm.");
+              closeTimeInput.value = '23:59';
+          }
+          increaseBtn.disabled = false; // Re-enable the increase button after updating the close time
+      }
+  }
+
+  function decreaseDuration(event) {
+      event.preventDefault();
+      updateDuration(-30);
+  }
+
+  function increaseDuration(event) {
+      event.preventDefault();
+      updateDuration(30);
+  }
+
+  function updateDuration(minutes) {
+      var currentDuration = parseInt(durationElement.textContent.split(' ')[0]);
+      var newDuration = currentDuration + minutes;
+      if (newDuration < 60) {
+          newDuration = 60;
+      }
+      durationElement.textContent = newDuration + ' mins';
+      if (openTimeInput.value !== "") {
+          updateCloseTime();
+      }
+  }
+
+  function updateCost(duration) {
+      var cost = (duration / 60) * hourlyPrice; 
+      costInput.value = cost.toFixed(2);
+  }
+
+  // Initialize the form values
+  updateCloseTime();
+
+</script>
+
+
+
+
+
+
+{% endblock %}
